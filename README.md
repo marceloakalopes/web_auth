@@ -19,3 +19,4 @@ Core technologies used in this project:
 - [ ] Implement password hashing and salting using `bcrypt`.
 - [ ] Implement the authentication process using JWT.
 - [ ] Implement middleware to check if the user is authenticated.
+- [ ] Move from Javascript to Typescript.
