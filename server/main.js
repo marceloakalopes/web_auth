@@ -57,7 +57,7 @@ app.post("/api/login", (req, res) => {
           .status(500)
           .json({ success: false, message: "Internal server error" });
       } else if (rows.length) {
-        console.log(rows);
+        //console.log(rows);
         res.status(200).json({ success: true, data: rows[0] });
       } else if (!rows.length) {
         res.status(500).json({ message: "Not found" });

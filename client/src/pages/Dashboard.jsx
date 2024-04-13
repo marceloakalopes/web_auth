@@ -10,16 +10,17 @@ const Dashboard = () => {
 
   if (!userId) {
     useEffect(() => {
-      navigate("/log-in");
+      navigate("/login");
     }, []);
   } else if (userId) {
     return (
-      <div>
+      <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <p className="text-xl font-semibold">
         Hello, {localStorage.getItem("username")}
-        <br />
-        <br />
-        <LogOutButton />
-      </div>
+      </p>
+      <br />
+      <LogOutButton  />
+    </div>
     );
   }
 };

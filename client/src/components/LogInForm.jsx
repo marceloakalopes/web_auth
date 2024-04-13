@@ -32,41 +32,48 @@ const LogInForm = () => {
   };
 
   return (
-    <div>
-      <form action="POST">
-        <label htmlFor="username">Username: </label>
-        <input
-          name="username"
-          id="username"
-          type="text"
-          onChange={(e) => {
-            e.preventDefault();
-            setUsername(e.target.value);
-          }}
-        />
-        <br />
-
-        <label htmlFor="password">Password: </label>
-        <input
-          type="text"
-          name="password"
-          id="password"
-          onChange={(e) => {
-            e.preventDefault();
-            setPassword(e.target.value);
-          }}
-        />
-        <br />
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <h1 className="text-2xl font-bold mb-4">Log In</h1>
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}>
+        <div className="mb-4">
+          <label htmlFor="username" className="block text-gray-700">
+            Username:
+          </label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            className="w-full px-4 py-2 mt-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="password" className="block text-gray-700">
+            Password:
+          </label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 mt-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+          />
+        </div>
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
+          type="submit"
+          className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg focus:outline-none hover:bg-blue-600"
         >
           Log In
         </button>
       </form>
-      <Link to="/">Home</Link>
+      <Link to="/" className="block mt-4 text-sm text-blue-500 hover:underline">
+        Home
+      </Link>
     </div>
   );
 };

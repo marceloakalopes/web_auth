@@ -11,7 +11,7 @@ const LogOutButton = () => {
     navigate("/");
   };
 
-  return <button onClick={logOut}>Sign Out</button>;
+  return <button onClick={logOut} className='px-4 py-2 text-white bg-red-500 rounded-lg focus:outline-none hover:bg-red-600'>Sign Out</button>;
 };
 
 export default LogOutButton;
