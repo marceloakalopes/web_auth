@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export function Form() {
+const LogInForm = () => {
   const navigate = useNavigate();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    const res = await fetch("http://localhost:5500/api/auth", {
+    await fetch("http://localhost:5500/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -17,14 +17,18 @@ export function Form() {
         key1: username,
         key2: password,
       }),
-    });
-
-    if (res.ok) {
-      //localStorage.setItem("username", username)
-      navigate("/");
-    } else if (!res.ok) {
-      console.log("Bad");
-    }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          localStorage.setItem("userId", data.data.UserId);
+          localStorage.setItem("username", data.data.Username);
+          navigate("/dashboard");
+        } else if (!data.success) {
+          console.log("Bad");
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -59,10 +63,12 @@ export function Form() {
             handleSubmit();
           }}
         >
-          Register
+          Log In
         </button>
       </form>
       <Link to="/">Home</Link>
     </div>
   );
-}
+};
+
+export default LogInForm;

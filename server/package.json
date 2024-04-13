@@ -11,6 +11,6 @@
     "nodemon": "^3.1.0"
   },
   "scripts": {
-    "dev": "nodemon main.js"
+    "api": "nodemon main.js"
   }
 }

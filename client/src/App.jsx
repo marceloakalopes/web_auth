@@ -1,10 +1,14 @@
-import {Form} from "./components/Form"
-
+import { Link } from "react-router-dom";
 
 function App() {
   return (
-    <Form />
-  )
+    <>
+      <h1>Vite App</h1>
+      <Link to="/sign-up">Sign Up</Link>
+      <br />
+      <Link to="/log-in">Log In</Link>
+    </>
+  );
 }
 
-export default App
+export default App;
