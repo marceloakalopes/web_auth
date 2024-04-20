@@ -11,16 +11,23 @@ import Dashboard from "./pages/Dashboard.jsx";
 import Success from "./pages/Success.jsx";
 
 const router = createBrowserRouter([
-  { path: "/", element: <App />, errorElement: <PageNotFoundPage /> },
-  { path: "/sign-up", element: <SignUpPage /> },
-  { path: "/login", element: <LogInPage /> },
+  { 
+    path: "/", element: <App />, 
+    errorElement: <PageNotFoundPage /> },
+  { 
+    path: "/sign-up", 
+    element: <SignUpPage /> },
+  { 
+    path: "/login", 
+    element: <LogInPage /> },
   {
     path: "/dashboard",
     element: <Dashboard />,
   },
-  {path: "/success",
-  element: <Success />
-  }
+  {
+    path: "/success",
+    element: <Success />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

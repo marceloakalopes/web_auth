@@ -4,13 +4,13 @@ const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const app = express();
-const sql = require("msnodesqlv8");
 
 app.use(cors());
 app.use(bodyParser.json());
 
-// Import the connection string from the .env file
-const config = process.env.CONNECTION_STRING;
+const { Sequelize, DataTypes } = require("sequelize");
+const sequelize = require("./config/index")(Sequelize);
+const User = require("./models/User")(sequelize, DataTypes);
 
 app.get("/api", (req, res) => {
   res.json({ name: "marcelo" });
@@ -22,15 +22,11 @@ app.post("/api/auth", (req, res) => {
     const key1 = req.body.key1;
     const key2 = req.body.key2;
 
-    const query = `INSERT INTO Users (Username, Password) VALUES ('${key1}', '${key2}')`;
-
-    sql.query(config, query, (err) => {
-      if (err) {
-        console.error("Error:", err);
-        res
-          .status(500)
-          .json({ success: false, message: "Internal server error one" });
-      }
+    sequelize.sync().then(() => {
+      User.create({
+        Username: key1,
+        Password: key2,
+      });
     });
 
     res
@@ -48,20 +44,17 @@ app.post("/api/login", (req, res) => {
     const key1 = req.body.key1;
     const key2 = req.body.key2;
 
-    const query = `SELECT UserId, Username FROM Users WHERE Username = '${key1}' AND Password = '${key2}'`;
-
-    sql.query(config, query, (err, rows) => {
-      if (err) {
-        console.error("Error:", err);
-        res
-          .status(500)
-          .json({ success: false, message: "Internal server error" });
-      } else if (rows.length) {
-        //console.log(rows);
-        res.status(200).json({ success: true, data: rows[0] });
-      } else if (!rows.length) {
-        res.status(500).json({ message: "Not found" });
-      }
+    sequelize.sync().then(() => {
+      User.findOne({ where: { Username: key1, Password: key2 } }).then(
+        (user) => {
+          if (user) {
+            const { UserId, Username } = user.dataValues;
+            res.status(200).json({ success: true, cred: { UserId, Username } });
+          } else {
+            res.status(500).json({ success: false, message: "Not found" });
+          }
+        }
+      );
     });
   } catch (err) {
     res.status(500).json({ success: false, message: "Internal server error" });

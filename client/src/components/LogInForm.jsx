@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 const LogInForm = () => {
   const navigate = useNavigate();
 
+  const [message, setMessage] = useState("");
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -21,11 +23,13 @@ const LogInForm = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          localStorage.setItem("userId", data.data.UserId);
-          localStorage.setItem("username", data.data.Username);
+          const { UserId, Username } = data.cred;
+
+          localStorage.setItem("userId", UserId);
+          localStorage.setItem("username", Username);
           navigate("/dashboard");
         } else if (!data.success) {
-          console.log("Bad");
+          setMessage("Invalid username or password. Try again.");
         }
       })
       .catch((err) => console.log(err));
@@ -34,10 +38,12 @@ const LogInForm = () => {
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4">Log In</h1>
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSubmit();
+        }}
+      >
         <div className="mb-4">
           <label htmlFor="username" className="block text-gray-700">
             Username:
@@ -74,6 +80,9 @@ const LogInForm = () => {
       <Link to="/" className="block mt-4 text-sm text-blue-500 hover:underline">
         Home
       </Link>
+      <div className="flex p-5 justify-center">
+        <p>{message}</p>
+      </div>
     </div>
   );
 };
