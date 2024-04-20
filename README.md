@@ -18,7 +18,7 @@ Core technologies used in this project:
 * ![Sequelize](https://img.shields.io/badge/Sequelize-52B0E7?style=for-the-badge&logo=Sequelize&logoColor=white)
 
 # Next Steps
-- [ ] Implement password hashing and salting using `bcrypt`.
-- [ ] Implement the authentication process using JWT.
-- [ ] Implement middleware to check if the user is authenticated using PassportJS.
-- [ ] Move from Javascript to Typescript.
+- [x] Implement password hashing and salting using `bcrypt`.
+- [ ] Implement the authentication process using `JWT`.
+- [ ] Implement middleware to check if the user is authenticated using `PassportJS`.
+- [ ] Move from Javascript to `Typescript`.
