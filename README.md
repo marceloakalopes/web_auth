@@ -19,6 +19,8 @@ Core technologies used in this project:
 
 # Next Steps
 - [x] Implement password hashing and salting using `bcrypt`.
-- [ ] Implement the authentication process using `JWT`.
 - [ ] Implement middleware to check if the user is authenticated using `PassportJS`.
+- [ ] Implement the authentication process using `JWT`.
 - [ ] Move from Javascript to `Typescript`.
+    - [x] Backend
+    - [ ] Frontend

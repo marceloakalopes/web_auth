@@ -12,12 +12,13 @@ const LogInForm = () => {
   const handleSubmit = async () => {
     await fetch("http://localhost:5500/api/login", {
       method: "POST",
+      withCredentials: true,
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        key1: username,
-        key2: password,
+        usernameField: username,
+        passwordField: password,
       }),
     })
       .then((res) => res.json())

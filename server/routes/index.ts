@@ -2,38 +2,31 @@
 require("dotenv").config();
 
 // Import necessary modules
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const app = express();
-const bcrypt = require("bcrypt");
-
-// Apply middleware
-app.use(cors()); // Enable CORS (Cross-Origin Resource Sharing)
-app.use(bodyParser.json()); // Parse JSON bodies (as sent by API clients)
-
+const router = require('express').Router();
+import bcrypt from "bcrypt";
+import express, {Request, Response} from "express";
 // Set up database connection and models
-const { Sequelize, DataTypes } = require("sequelize");
-const sequelize = require("./config/index")(Sequelize); // Initialize Sequelize with configuration from config/index.js
-const User = require("./models/User")(sequelize, DataTypes); // Import the User model
+import { Sequelize, DataTypes } from "sequelize";
+const sequelize = require("../config/database")(Sequelize); // Initialize Sequelize with configuration from config/index.js
+const User = require("../models/User")(sequelize, DataTypes); // Import the User model
 
 // Define a simple route to check API status
-app.get("/api", (req, res) => {
-  res.json({ name: "marcelo" }); // Send response as JSON
+router.get("/api", (req: Request, res: Response) => {
+  res.json({ author: "Marcelo" }); // Send response as JSON
 });
 
 // Handle user registration
-app.post("/api/auth", async (req, res) => {
+router.post("/api/auth", async (req: Request, res: Response) => {
   try {
-    const key1 = req.body.key1; // Assume key1 is the username
-    const key2 = req.body.key2; // Assume key2 is the password
+    const usernameField = req.body.usernameField; // Assume usernameField is the username
+    const passwordField = req.body.passwordField; // Assume passwordField is the password
 
-    const hash = await bcrypt.hash(key2, 12); // Hash the password
+    const hash = await bcrypt.hash(passwordField, 12); // Hash the password
 
     await sequelize.sync().then(() => {
       User.create({
         // Create a new user record in the database
-        Username: key1,
+        Username: usernameField,
         Password: hash,
       });
     });
@@ -48,19 +41,19 @@ app.post("/api/auth", async (req, res) => {
 });
 
 // Handle user login
-app.post("/api/login", async (req, res) => {
+router.post("/api/login", async (req: Request, res: Response) => {
   try {
-    const key1 = req.body.key1; // Username
-    const key2 = req.body.key2; // Password
+    const usernameField = req.body.usernameField; // Username
+    const passwordField = req.body.passwordField; // Password
 
     await sequelize.sync().then(() => {
-      User.findOne({ where: { Username: key1 } }).then(
+      User.findOne({ where: { Username: usernameField } }).then(
         // Find the user by username
-        async (user) => {
+        async (user: any) => {
           if (user) {
             const { UserId, Username, Password } = user.dataValues;
 
-            const match = await bcrypt.compare(key2, Password); // Compare the hashed passwords
+            const match = await bcrypt.compare(passwordField, Password); // Compare the hashed passwords
 
             if (!match) {
               // If the password does not match
@@ -82,8 +75,4 @@ app.post("/api/login", async (req, res) => {
   }
 });
 
-// Define the port and start the server
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log("SERVER RUNNING"); // Log that the server is running
-});
+module.exports = router;

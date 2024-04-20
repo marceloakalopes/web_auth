@@ -1,5 +1,7 @@
+import { Sequelize } from "sequelize";
+
 // Used for creating the User model in the database
-module.exports = (sequelize, DataTypes) => {
+module.exports = (sequelize:Sequelize, DataTypes:any) => {
   const User = sequelize.define("User", {
     UserId: {
       type: DataTypes.INTEGER,

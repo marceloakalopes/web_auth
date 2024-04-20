@@ -14,8 +14,8 @@ export function Form() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        key1: username,
-        key2: password,
+        usernameField: username,
+        passwordField: password,
       }),
     });
 

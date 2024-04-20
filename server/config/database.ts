@@ -1,4 +1,4 @@
-module.exports = (Sequelize) => {
+module.exports = (Sequelize:any) => {
   
   const sequelize = new Sequelize(
     process.env.DB_NAME,

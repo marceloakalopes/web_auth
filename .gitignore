@@ -5,10 +5,7 @@
 node_modules
 
 ### Test files ###
-db.js
+db.ts
 
 ### Scripts ###
 run.sh
-
-### Hashing Function ###
-hashPassword.js
