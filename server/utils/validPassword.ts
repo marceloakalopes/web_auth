@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 import bcrypt from 'bcrypt';
 
 function validPassword(password: string, hash: string) {

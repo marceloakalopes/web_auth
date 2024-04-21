@@ -4,16 +4,34 @@ require("dotenv").config();
 // Import necessary modules
 const router = require('express').Router();
 import bcrypt from "bcrypt";
-import express, {Request, Response} from "express";
+import express, {Request, Response, NextFunction} from "express";
 // Set up database connection and models
 import { Sequelize, DataTypes } from "sequelize";
 const sequelize = require("../config/database")(Sequelize); // Initialize Sequelize with configuration from config/index.js
 const User = require("../models/User")(sequelize, DataTypes); // Import the User model
+const Session = require("../models/Session")(sequelize, DataTypes); // Import the Session model
 
 // Define a simple route to check API status
 router.get("/api", (req: Request, res: Response) => {
   res.json({ author: "Marcelo" }); // Send response as JSON
 });
+
+const setCookies = (req:Request, res:Response, next:NextFunction) => {
+
+  var cookie = req.cookies.sid;
+  console.log('cookie:', cookie);
+
+  if (cookie === undefined) {
+    res.cookie('sid', '12345', { httpOnly: true, maxAge: 1000 * 60 * 60 * 24 * 7 });
+  } else {
+    console.log('cookie exists', cookie);
+  }
+  next();
+}
+
+router.get("/cookies", setCookies, (req:Request, res:Response) => {
+  res.send("<h1>cookies</h1>")
+})
 
 // Handle user registration
 router.post("/api/auth", async (req: Request, res: Response) => {
@@ -40,6 +58,13 @@ router.post("/api/auth", async (req: Request, res: Response) => {
   }
 });
 
+interface User {
+  UserId: number;
+  Username: string;
+  Password: string;
+
+}
+
 // Handle user login
 router.post("/api/login", async (req: Request, res: Response) => {
   try {
@@ -60,9 +85,40 @@ router.post("/api/login", async (req: Request, res: Response) => {
               res.status(500).json({ success: false, message: "Not found" });
             } else if (match) {
               // If the password matches
-              res
-                .status(200)
-                .json({ success: true, cred: { UserId, Username } }); // Return the user's credentials
+
+              const hashSid = await bcrypt.hash(`${process.env.HASH_FUNCTION}${Username}${process.env.SESSION_SECRET}`, 10); // Hash the session ID
+
+              // Create a new session record in the database
+              try {
+                  await Session.create({
+                  sid: hashSid,
+                  userId: UserId,
+                  data: "session",
+                });
+              }
+              catch (error) {
+                console.error("Error:", error);
+                res.status(500).json({ success: false, message: "Internal server error" }); // Handle errors
+              }
+
+              // Set the session cookie
+            res.cookie("sid", hashSid, { 
+              expires: new Date(Date.now() + 86400000 * 7), // Set the expiry date to 7 days
+              httpOnly: true,
+              secure: true,
+              sameSite: "lax",
+            }); 
+
+            res.cookie("userId", UserId, {
+              expires: new Date(Date.now() + 86400000 * 7), // Set the expiry date to 7 days
+              httpOnly: true,
+              secure: true,
+              sameSite: "lax",
+            })
+
+            res
+              .status(200)
+              .json({ success: true, message: "Login successful" }); // Respond with success
             }
           } else {
             res.status(500).json({ success: false, message: "Not found" }); // User not found
@@ -73,6 +129,26 @@ router.post("/api/login", async (req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json({ success: false, message: "Internal server error" }); // Handle errors
   }
+});
+
+// Handle user logout
+router.get('/api/logout', (req: Request, res: Response) => {
+  // Set 'sid' cookie's expiry to the past, effectively clearing it
+  res.cookie('sid', '', { 
+    expires: new Date(0),
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
+
+  res.cookie('userId', '', {
+    expires: new Date(0),
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
+
+  res.status(200).json({ success: true, message: 'Logged out successfully' });
 });
 
 module.exports = router;

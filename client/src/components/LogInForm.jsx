@@ -12,7 +12,7 @@ const LogInForm = () => {
   const handleSubmit = async () => {
     await fetch("http://localhost:5500/api/login", {
       method: "POST",
-      withCredentials: true,
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },
@@ -24,10 +24,6 @@ const LogInForm = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          const { UserId, Username } = data.cred;
-
-          localStorage.setItem("userId", UserId);
-          localStorage.setItem("username", Username);
           navigate("/dashboard");
         } else if (!data.success) {
           setMessage("Invalid username or password. Try again.");
