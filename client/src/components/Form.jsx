@@ -29,7 +29,7 @@ export function Form() {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-4">Register</h1>
+      <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -71,6 +71,12 @@ export function Form() {
       </form>
       <Link to="/" className="block mt-4 text-sm text-blue-500 hover:underline">
         Home
+      </Link>
+      <Link
+        to="/login"
+        className="block mt-4 text-sm text-blue-500 hover:underline"
+      >
+        Login
       </Link>
     </div>
   );

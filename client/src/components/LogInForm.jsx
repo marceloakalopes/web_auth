@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 const LogInForm = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const LogInForm = () => {
   const handleSubmit = async () => {
     await fetch("http://localhost:5500/api/login", {
       method: "POST",
-      credentials: 'include',
+      credentials: "include",
       headers: {
         "Content-Type": "application/json",
       },
@@ -24,6 +25,10 @@ const LogInForm = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
+          localStorage.setItem(
+            "username",
+            capitalizeFirstLetter(data.username)
+          );
           navigate("/dashboard");
         } else if (!data.success) {
           setMessage("Invalid username or password. Try again.");
@@ -76,6 +81,12 @@ const LogInForm = () => {
       </form>
       <Link to="/" className="block mt-4 text-sm text-blue-500 hover:underline">
         Home
+      </Link>
+      <Link
+        to="/signup"
+        className="block mt-4 text-sm text-blue-500 hover:underline"
+      >
+        Sign Up
       </Link>
       <div className="flex p-5 justify-center">
         <p>{message}</p>

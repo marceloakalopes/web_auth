@@ -9,24 +9,36 @@ import LogInPage from "./pages/LogInPage.jsx";
 import PageNotFoundPage from "./pages/PageNotFoundPage.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Success from "./pages/Success.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
+import { AuthProvider } from "./context/AuthContext.jsx";
 
 const router = createBrowserRouter([
-  { 
-    path: "/", element: <App />, 
-    errorElement: <PageNotFoundPage /> },
-  { 
-    path: "/sign-up", 
-    element: <SignUpPage /> },
-  { 
-    path: "/login", 
-    element: <LogInPage /> },
   {
-    path: "/dashboard",
-    element: <Dashboard />,
+    path: "/",
+    element: <App />,
+    errorElement: <PageNotFoundPage />,
+  },
+  {
+    path: "/signup",
+    element: <SignUpPage />,
+  },
+  {
+    path: "/login",
+    element: <LogInPage />,
   },
   {
     path: "/success",
     element: <Success />,
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <AuthProvider>
+        <PrivateRoute>
+          <Dashboard />
+        </PrivateRoute>
+      </AuthProvider>
+    ),
   },
 ]);
 

@@ -15,7 +15,8 @@ const LogOutButton = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          navigate("/");
+          localStorage.removeItem("username");
+          window.location.reload();
         }
       })
       .catch((err) => {
