@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 export function Form() {
   const navigate = useNavigate();
 
+  const [message, setMessage] = useState("");
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -17,14 +19,18 @@ export function Form() {
         usernameField: username,
         passwordField: password,
       }),
-    });
+    })
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        navigate("/dashboard");
+      } else if (!data.success) {
+        setMessage(data.message);
+      }
+    })
 
-    if (res.ok) {
-      //localStorage.setItem("username", username)
-      navigate("/success");
-    } else if (!res.ok) {
-      console.log("Bad");
-    }
+
+    
   };
 
   return (
@@ -78,6 +84,9 @@ export function Form() {
       >
         Login
       </Link>
+      <div className="flex p-5 justify-center">
+        <p>{message}</p>
+      </div>
     </div>
   );
 }

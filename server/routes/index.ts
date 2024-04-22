@@ -41,19 +41,26 @@ router.post("/api/auth", async (req: Request, res: Response) => {
     const usernameField = req.body.usernameField; // Assume usernameField is the username
     const passwordField = req.body.passwordField; // Assume passwordField is the password
 
-    const hash = await bcrypt.hash(passwordField, 12); // Hash the password
+    User.findOne({ where: { Username: usernameField } }).then((user: any) => {
+      if (user) {
+        res
+          .status(500)
+          .json({ success: false, message: "User already exists. Try again." }); // User already exists
+      } else if (!user) {
+       (async () => {
+        const hash = await bcrypt.hash(passwordField, 12); // Hash the password
+        User.create({
+          // Create a new user record in the database
+          Username: usernameField,
+          Password: hash,
+        });
 
-    await sequelize.sync().then(() => {
-      User.create({
-        // Create a new user record in the database
-        Username: usernameField,
-        Password: hash,
-      });
+        res
+          .status(200)
+          .json({ success: true, message: "Data inserted successfully" }); // Respond with success
+       })();
+      }
     });
-
-    res
-      .status(200)
-      .json({ success: true, message: "Data inserted successfully" }); // Respond with success
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ success: false, message: "Internal server error" }); // Handle errors

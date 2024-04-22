@@ -23,7 +23,7 @@ function App() {
         <>
           <div className="flex justify-center items-center mb-4">
             <Link
-              to="/sign-up"
+              to="/signup"
               className="px-6 py-3 text-lg text-white bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
             >
               Sign Up
