@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-export function Form() {
+export function SignUpForm() {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState("");
@@ -9,7 +9,7 @@ export function Form() {
   const [password, setPassword] = useState("");
 
   const handleSubmit = async () => {
-    const res = await fetch("http://localhost:5500/api/auth", {
+    await fetch("http://localhost:5500/api/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,7 +22,7 @@ export function Form() {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          navigate("/dashboard");
+          navigate("/success");
         } else if (!data.success) {
           setMessage(data.message);
         }

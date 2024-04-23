@@ -36,7 +36,7 @@ router.get("/cookies", setCookies, (req: Request, res: Response) => {
 });
 
 // Handle user registration
-router.post("/api/auth", async (req: Request, res: Response) => {
+router.post("/api/signup", async (req: Request, res: Response) => {
   try {
     const usernameField = req.body.usernameField; // Assume usernameField is the username
     const passwordField = req.body.passwordField; // Assume passwordField is the password
