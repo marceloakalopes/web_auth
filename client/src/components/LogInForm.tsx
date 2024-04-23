@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import capitalizeFirstLetter from "../utils/capitalizeFirstLetter";
 
 const LogInForm = () => {
   const navigate = useNavigate();
@@ -27,8 +26,9 @@ const LogInForm = () => {
         if (data.success) {
           localStorage.setItem(
             "username",
-            capitalizeFirstLetter(data.username)
+            username
           );
+          localStorage.setItem("Name", data.Name);
           navigate("/dashboard");
         } else if (!data.success) {
           setMessage("Invalid username or password. Try again.");
@@ -38,7 +38,7 @@ const LogInForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
+    <div className="w-[460px] max-w-[520px] min-w-96 mx-auto p-6 bg-white rounded-lg shadow-lg">
       <h1 className="text-2xl font-bold mb-4">Log In</h1>
       <form
         onSubmit={(e) => {

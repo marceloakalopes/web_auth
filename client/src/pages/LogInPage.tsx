@@ -1,9 +1,8 @@
-import React from "react";
 import LogInForm from "../components/LogInForm";
 
 const LogInPage = () => {
   return (
-    <div>
+    <div className='flex h-screen items-center'>
       <LogInForm />
     </div>
   );

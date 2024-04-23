@@ -1,15 +1,15 @@
 import LogOutButton from "../components/LogOutButton";
 import { Link } from "react-router-dom";
-import getUserId from "../utils/getUserId";
+import getName from "../utils/getName";
 
 const Dashboard = () => {
 
-  const userId:String | null = getUserId();
+  const name:String | null = getName();
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
       <p className="text-xl font-semibold">
-        Hello, {userId}
+        Hello, {name}!
       </p>
       <br />
       <LogOutButton />
