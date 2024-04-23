@@ -1,11 +1,15 @@
 import LogOutButton from "../components/LogOutButton";
 import { Link } from "react-router-dom";
+import getUserId from "../utils/getUserId";
 
 const Dashboard = () => {
+
+  const userId:String | null = getUserId();
+
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
       <p className="text-xl font-semibold">
-        Hello, {localStorage.getItem("username")}
+        Hello, {userId}
       </p>
       <br />
       <LogOutButton />
