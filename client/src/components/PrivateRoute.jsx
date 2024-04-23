@@ -1,4 +1,3 @@
-// src/components/PrivateRoute.js
 import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
@@ -8,7 +7,7 @@ const PrivateRoute = ({ children }) => {
   let location = useLocation();
 
   if (loading) {
-    return <div>Loading...</div>; // Or some loading spinner
+    return <div>Loading...</div>;
   }
 
   if (!isAuthenticated) {

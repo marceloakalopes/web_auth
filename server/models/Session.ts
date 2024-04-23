@@ -1,6 +1,6 @@
 import { Sequelize } from "sequelize";
 
-// Used for creating the User model in the database
+// Used for creating the Session model in the database
 module.exports = (sequelize: Sequelize, DataTypes: any) => {
   const Session = sequelize.define("Session", {
     sid: {

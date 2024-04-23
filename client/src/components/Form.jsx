@@ -5,7 +5,6 @@ export function Form() {
   const navigate = useNavigate();
 
   const [message, setMessage] = useState("");
-
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -20,17 +19,14 @@ export function Form() {
         passwordField: password,
       }),
     })
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.success) {
-        navigate("/dashboard");
-      } else if (!data.success) {
-        setMessage(data.message);
-      }
-    })
-
-
-    
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          navigate("/dashboard");
+        } else if (!data.success) {
+          setMessage(data.message);
+        }
+      });
   };
 
   return (
