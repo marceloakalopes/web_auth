@@ -1,12 +1,12 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
-const AuthContext = createContext();
+const AuthContext = createContext({});
 
 export function useAuth() {
   return useContext(AuthContext);
 }
 
-export const AuthProvider = ({ children }) => {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -14,11 +14,15 @@ export const AuthProvider = ({ children }) => {
     fetch("http://localhost:5500/api/validate", {
       method: "GET",
       credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.isAuthenticated) {
-          setUser(localStorage.getItem("username"));
+          const username : String | any = localStorage.getItem("__Username");
+          setUser(username !== null ? username : null);
         } else {
           setUser(null);
         }

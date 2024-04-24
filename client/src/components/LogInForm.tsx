@@ -9,6 +9,12 @@ const LogInForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const [fieldType, setFieldType] = useState("password");
+
+  const toggleFieldType = () => {
+    setFieldType(fieldType === "password" ? "text" : "password");
+  };
+
   const handleSubmit = async () => {
     await fetch("http://localhost:5500/api/login", {
       method: "POST",
@@ -24,11 +30,8 @@ const LogInForm = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          localStorage.setItem(
-            "username",
-            username
-          );
-          localStorage.setItem("Name", data.Name);
+          localStorage.setItem("__Name", data.userData.Name);
+          localStorage.setItem("__Username", data.userData.Username);
           navigate("/dashboard");
         } else if (!data.success) {
           setMessage("Invalid username or password. Try again.");
@@ -64,13 +67,21 @@ const LogInForm = () => {
             Password:
           </label>
           <input
-            type="password"
+            type={fieldType}
             name="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full px-4 py-2 mt-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
           />
+          <div className="mb-4">
+          <input
+            type="checkbox"
+            onClick={toggleFieldType}
+            className="mr-2"
+          />
+          <label>Show Password</label>
+        </div>
         </div>
         <button
           type="submit"

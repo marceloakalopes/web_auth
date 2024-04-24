@@ -4,8 +4,7 @@ declare global {
         SESSION_SECRET: string!;
         NODE_ENV: 'development' | 'production';
         PORT: number;
-        HASH_FUNCTION: string;
-        SESSION_SECRET: string;
+        JWT_SECRET: string;
         }
     }
 }

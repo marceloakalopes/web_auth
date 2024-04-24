@@ -1,7 +1,5 @@
-import { useNavigate } from "react-router-dom";
 
 const LogOutButton = () => {
-  const navigate = useNavigate();
 
   const logOut = async () => {
     await fetch("http://localhost:5500/api/logout", {
@@ -14,8 +12,11 @@ const LogOutButton = () => {
       .then((res) => res.json())
       .then((data) => {
         if (data.success) {
-          localStorage.removeItem("username");
+          localStorage.removeItem("__Name");
+          localStorage.removeItem("__Username");
           window.location.reload();
+
+
         }
       })
       .catch((err) => {

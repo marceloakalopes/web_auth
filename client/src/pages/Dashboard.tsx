@@ -1,10 +1,9 @@
 import LogOutButton from "../components/LogOutButton";
 import { Link } from "react-router-dom";
-import getName from "../utils/getName";
 
 const Dashboard = () => {
 
-  const name:String | null = getName();
+  const name:String | null = localStorage.getItem("__Name");
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg">
