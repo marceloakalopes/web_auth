@@ -1,5 +1,12 @@
+import logo from "@/assets/logo.png";
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Switch } from "./ui/switch";
 
 const LogInForm = () => {
   const navigate = useNavigate();
@@ -41,66 +48,65 @@ const LogInForm = () => {
   };
 
   return (
-    <div className="w-[460px] max-w-[520px] min-w-96 mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-2xl font-bold mb-4">Log In</h1>
+    <div className="block w-[460px] max-w-[520px] min-w-96 mx-auto p-6 bg-black items-center">
+      <div className="flex justify-center py-6">
+        <Link to="/">
+          <img src={logo} alt="white square icon" className="w-36 " />
+        </Link>
+      </div>
+      <h1 className="text-3xl font-bold mb-6 text-center">
+        Log in to your account
+      </h1>
       <form
         onSubmit={(e) => {
           e.preventDefault();
           handleSubmit();
         }}
       >
-        <div className="mb-4">
-          <label htmlFor="username" className="block text-gray-700">
+        <div className="mb-6">
+          <Label htmlFor="username" className="block text-white font-medium text-base">
             Username:
-          </label>
-          <input
+          </Label>
+          <Input
             type="text"
             name="username"
             id="username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            className="w-full px-4 py-2 mt-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+            className="w-full h-12 text-base font-medium"
           />
         </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-700">
+        <div className="mb-6">
+          <Label htmlFor="password" className="block text-white font-medium text-base">
             Password:
-          </label>
-          <input
+          </Label>
+          <Input
             type={fieldType}
             name="password"
             id="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full px-4 py-2 mt-2 border rounded-lg shadow-sm focus:outline-none focus:border-blue-500"
+            className="w-full h-12 text-base font-medium"
           />
-          <div className="mb-4">
-          <input
-            type="checkbox"
-            onClick={toggleFieldType}
-            className="mr-2"
-          />
-          <label>Show Password</label>
+          <div className="flex items-center space-x-2 mt-5">
+            <Switch onClick={toggleFieldType} id="see-password" />
+            <Label className="font-medium text-base" htmlFor="see-password">Show Password</Label>
+          </div>
         </div>
-        </div>
-        <button
-          type="submit"
-          className="w-full px-4 py-2 text-white bg-blue-500 rounded-lg focus:outline-none hover:bg-blue-600"
-        >
+        <Button variant="secondary" type="submit" className="w-full h-12 inline-flex px-10 text-base font-medium">
           Log In
-        </button>
+        </Button>
       </form>
-      <Link to="/" className="block mt-4 text-sm text-blue-500 hover:underline">
-        Home
-      </Link>
-      <Link
-        to="/signup"
-        className="block mt-4 text-sm text-blue-500 hover:underline"
-      >
-        Sign Up
-      </Link>
       <div className="flex p-5 justify-center">
         <p>{message}</p>
+      </div>
+      <div className="flex flex-col justify-center gap-8 items-center mt-16">
+        <p className="font-medium text-base">Don't have an account? </p>
+        <Button variant="ghost" className="inline-flex h-12 px-10 text-base font-medium">
+          <Link to="/signup" >
+            Sign Up
+          </Link>
+        </Button>
       </div>
     </div>
   );
