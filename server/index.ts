@@ -5,8 +5,9 @@ require("dotenv").config();
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
-const cookieParser = require('cookie-parser');
-const routes = require("./routes");
+import cookieParser from "cookie-parser";
+import routes from "./routes";
+import { errorHandler } from "./middlewares";
 
 // Create an express application
 const app = express();
@@ -19,13 +20,11 @@ app.use(cors({
 app.use(bodyParser.json()); // Parse JSON bodies (as sent by API clients)
 app.use(cookieParser())
 
-// Set up database connection and models
-import { Sequelize, DataTypes } from "sequelize";
-const sequelize = require("./config/database")(Sequelize); // Initialize Sequelize with configuration from config/index.js
-const User = require("./models/User")(sequelize, DataTypes); // Import the User model
-
 // Import all the routes from ./routes/index.js
 app.use(routes);
+
+// Error handling middleware
+app.use(errorHandler);
 
 // Define the port and start the server
 const PORT = process.env.PORT || 3000;

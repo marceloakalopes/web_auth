@@ -1,9 +1,10 @@
-require('dotenv').config();
+import bcrypt from "bcrypt";
 
-import bcrypt from 'bcrypt';
-
-function validPassword(password: string, hash: string) {
-    return bcrypt.compareSync(password, hash);
+/**
+ * Function to compare the password entered by the user with the hashed password stored in the database
+ * @param {string} password - password entered by the user
+ * @param {string} hash - hashed password stored in the database
+ */
+export function validPassword(password: string, hash: string) {
+  return bcrypt.compareSync(password, hash);
 }
-
-module.exports = validPassword;

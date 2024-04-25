@@ -26,3 +26,5 @@ Core technologies used in this project:
 - [x] Move from Javascript to `Typescript`.
     - [x] Backend
     - [x] Frontend
+- [ ] Implement data validation using `Joi`.
+- [ ] Add HelmetJS for security.

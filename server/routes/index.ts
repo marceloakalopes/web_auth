@@ -1,71 +1,38 @@
-// Load environment variables from .env file
 require("dotenv").config();
 
-// Import necessary modules
-const router = require("express").Router();
+import { Router, Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Request, Response, NextFunction } from "express";
-// Set up database connection and models
-import { Sequelize, DataTypes } from "sequelize";
-const sequelize = require("../config/database")(Sequelize); // Initialize Sequelize with configuration from config/index.js
-const User = require("../models/User")(sequelize, DataTypes); // Import the User model
-const JWT_SECRET = process.env.JWT_SECRET as string;
+import { DataTypes } from "sequelize";
+import createSequelizeInstance from "../config/database";
+import createUserModel from "../models/User";
+import { authenticateToken } from "../middlewares";
 
-interface CustomRequest extends Request {
-  user: any;
-}
+const router = Router();
+const sequelize = createSequelizeInstance();
+const User = createUserModel(sequelize, DataTypes);
 
-const authenticateToken = (
-  req: CustomRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const token = req.cookies.__jwt; // Get the session ID from the cookie
-    const decoded = jwt.verify(token, JWT_SECRET); // Verify the JWT token
-
-    if (decoded) {
-      next(); // Proceed to the next middleware
-    } else {
-      res.status(401).json({ isAuthenticated: false }); // Respond with failure
-    }
-  } catch (error) {
-    res.status(401).json({ isAuthenticated: false }); // Respond with failure
-  }
-};
-// Define a simple route to check API status
-router.get("/api", (res: Response) => {
+// Test API
+router.get("/api", (req: Request, res: Response) => {
   res.json({ author: "Marcelo" }); // Send response as JSON
 });
 
-const setCookies = (req: Request, res: Response, next: NextFunction) => {
-  var cookie = req.cookies.sid;
-  console.log("cookie:", cookie);
-
-  if (cookie === undefined) {
-    res.cookie("sid", "12345", {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7,
-    });
-  } else {
-    console.log("cookie exists", cookie);
-  }
-  next();
-};
-
-router.get("/cookies", setCookies, (req: Request, res: Response) => {
-  res.send("<h1>cookies</h1>");
-});
+interface User {
+  UserId: number;
+  Name: string;
+  Username: string;
+  Email: string;
+  Password: string;
+}
 
 // Handle user registration
 router.post("/api/signup", async (req: Request, res: Response) => {
   try {
-    const nameField = req.body.nameField; // Assume nameField is the full name
-    const usernameField = req.body.usernameField; // Assume usernameField is the username
-    const emailField = req.body.emailField; // Assume emailField is the email
-    const passwordField = req.body.passwordField; // Assume passwordField is the password
-    const confirmPasswordField = req.body.confirmPasswordField; // Assume confirmPasswordField is the confirm password
+    const nameField = req.body.nameField;
+    const usernameField = req.body.usernameField;
+    const emailField = req.body.emailField;
+    const passwordField = req.body.passwordField;
+    const confirmPasswordField = req.body.confirmPasswordField;
 
     if (passwordField !== confirmPasswordField) {
       res.status(500).json({
@@ -104,14 +71,6 @@ router.post("/api/signup", async (req: Request, res: Response) => {
   }
 });
 
-interface User {
-  UserId: number;
-  Name: string;
-  Username: string;
-  Email: string;
-  Password: string;
-}
-
 // Handle user login
 router.post("/api/login", async (req: Request, res: Response) => {
   try {
@@ -132,9 +91,9 @@ router.post("/api/login", async (req: Request, res: Response) => {
               .status(401)
               .json({ success: false, message: "Incorrect Password" });
           } else if (match) {
-            // If the password matches
 
-            const accessToken = jwt.sign(Username, JWT_SECRET); // Create a JWT token
+            // If the password matches
+            const accessToken = jwt.sign(Username, process.env.JWT_SECRET as string); // Create a JWT token
 
             res.cookie("__jwt", accessToken, {
               httpOnly: true,
@@ -186,16 +145,19 @@ router.get(
 );
 
 // Handle user logout
-router.get("/api/logout", (req: Request, res: Response) => {
-  // Set 'sid' cookie's expiry to the past, effectively clearing it
-  res.cookie("__jwt", "", {
-    expires: new Date(0),
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-  });
+router.get(
+  "/api/logout",
+  authenticateToken,
+  async (req: Request, res: Response) => {
+    res.cookie("__jwt", "", {
+      expires: new Date(0),
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+    });
 
-  res.status(200).json({ success: true, message: "Logged out successfully" });
-});
+    res.status(200).json({ success: true, message: "Logged out successfully" });
+  }
+);
 
-module.exports = router;
+export default router;
