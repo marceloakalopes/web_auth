@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 
-import { Label } from "@radix-ui/react-Label";
+import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Switch } from "./ui/switch";
 import { Button } from "./ui/button";
