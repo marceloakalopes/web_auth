@@ -25,6 +25,11 @@ interface User {
   Password: string;
 }
 
+interface AdminUser extends User {
+  token: string;
+  banUser: () => void;
+}
+
 // Handle user registration
 router.post("/api/signup", async (req: Request, res: Response) => {
   try {
@@ -49,7 +54,7 @@ router.post("/api/signup", async (req: Request, res: Response) => {
           }); // User already exists
         } else if (!user) {
           (async () => {
-            const hash = await bcrypt.hash(passwordField, 12); // Hash the password
+            const hash = await bcrypt.hash(passwordField, 15); // Hash the password
             User.create({
               // Create a new user record in the database
               Name: nameField,
@@ -79,7 +84,7 @@ router.post("/api/login", async (req: Request, res: Response) => {
 
     User.findOne({ where: { Username: usernameField } }).then(
       // Find the user by username
-      async (user: any) => {
+      async (user) => {
         if (user) {
           const { UserId, Name, Username, Email, Password } = user.dataValues;
 

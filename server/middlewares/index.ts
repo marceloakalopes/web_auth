@@ -7,13 +7,14 @@ import jwt from "jsonwebtoken";
  * @param {Request} req 
  * @param {Response} res 
  * @param {NextFunction} next 
+ * @returns {void} - Responds with the error message or moves to the next middleware
  */
 export function errorHandler(
     err: Error,
     req: Request,
     res: Response,
     next: NextFunction,
-) {
+): void {
     const statusCode = res.statusCode ? res.statusCode : 500;
     res.status(statusCode);
 
@@ -31,12 +32,13 @@ export function errorHandler(
  * @param {Request} req 
  * @param {Response} res 
  * @param {NextFunction} next 
+ * @returns {void} - Proceeds to the next middleware or controller
  */
 export const authenticateToken = (
     req: Request,
     res: Response,
     next: NextFunction
-  ) => {
+  ): void => {
     try {
       const token = req.cookies.__jwt; // Get the session ID from the cookie
       const decoded = jwt.verify(token, process.env.JWT_SECRET as string); // Verify the JWT token
