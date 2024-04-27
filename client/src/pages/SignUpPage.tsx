@@ -2,7 +2,7 @@ import {SignUpForm} from '../components/SignUpForm'
 
 const SignUpPage = () => {
   return (
-    <div className='flex h-screen items-center bg-black text-white'>
+    <div className='flex h-full items-center bg-black text-white'>
         <SignUpForm />
     </div>
   )

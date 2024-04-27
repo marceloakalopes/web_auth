@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { FormEventHandler, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 
@@ -16,6 +16,7 @@ export function SignUpForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [fieldType, setFieldType] = useState("password");
 
@@ -23,7 +24,9 @@ export function SignUpForm() {
     setFieldType(fieldType === "password" ? "text" : "password");
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e: FormEventHandler | any) => {
+    e.preventDefault();
+    setIsLoading(true);
 
     if (password !== confirmPassword) {
       setMessage("Passwords do not match. Please try again.");
@@ -61,10 +64,7 @@ export function SignUpForm() {
       </div>
       <h1 className="text-3xl font-bold mb-8 text-center">Create an account</h1>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSubmit();
-        }}
+        onSubmit={handleSubmit}
       >
         <div className="mb-6">
           <Label htmlFor="name" className="block text-white font-medium text-base">
@@ -158,8 +158,28 @@ export function SignUpForm() {
             <Switch onClick={toggleFieldType} id="see-password" />
             <Label className="font-medium text-base" htmlFor="see-password">Show Password</Label>
           </div>
-          <Button variant="secondary" type="submit" className="w-full h-12 inline-flex px-10 text-base font-medium">
-          Sign Up
+          <Button variant="secondary" type="submit" className="w-full h-12 inline-flex px-10 text-base font-medium"
+          disabled={isLoading}
+          >
+          {isLoading ? (
+            <svg className="animate-spin h-5 w-5 mr-3" viewBox="0 0 24 24">
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              ></circle>
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.314 1.343 6.315 3.514 8.485l2.486-2.194z"
+              ></path>
+            </svg>
+          ) : (
+            "Sign Up"
+          )}
         </Button>
       </form>
       <div className="flex p-5 justify-center">

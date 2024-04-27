@@ -2,7 +2,7 @@ import LogInForm from "../components/LogInForm";
 
 const LogInPage = () => {
   return (
-    <div className='flex h-screen items-center bg-black text-white'>
+    <div className='flex h-full items-center bg-black text-white'>
       <LogInForm />
     </div>
   );
